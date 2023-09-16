@@ -11,7 +11,7 @@
 #include <utility>
 #include <exception>
 
-#include "dm_task.h"
+#include "../dm_task.h"
 
 
 #include <iostream>
@@ -22,11 +22,14 @@ class DM_signal {     // move-only: move-from state holds _penq{nullptr}
    std::promise<DM_enquiry>    _prom ;            // set the result in (when ready)
 
    public:
-      DM_signal(DM_enquiry* enq) : _penq{enq} {}
+      DM_signal(DM_enquiry* enq) : _penq{enq}, _prom{} {}
       // ~DM_signal() { _penq = nullptr ; }
 
       DM_signal(DM_signal&& s) : _penq{s._penq}, _prom{std::move(s._prom)} {}
       DM_signal& operator= (DM_signal&& s) = delete ;
+
+      DM_enquiry* get_enquiry() const& { return _penq ; }
+      // DM_enquiry* clear_enquiry() & { DM_enquiry* we = _penq ; _penq = nullptr ; return we ; }
 
       std::future<DM_enquiry> get_future() { return _prom.get_future() ; }
       void   set_exception() { _prom.set_exception(std::current_exception()) ; }
@@ -43,3 +46,5 @@ class DM_signal {     // move-only: move-from state holds _penq{nullptr}
 
 _DEFS_DM_COMMUNICATION_
 #endif
+
+// eof dm_communication.h

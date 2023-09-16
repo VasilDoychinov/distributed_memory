@@ -17,13 +17,18 @@ set(CMAKE_CXX_EXTENSIONS        OFF)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
+# add_library(ipm STATIC ~/src/Study/LinuxC/libraries/ipm/ipm.c)
+
 add_executable(DM_sim
   ${PROJECT_SOURCE_DIR}/test_dm.cpp
-  ${MY_SOURCE_DIR}/dm_task.cpp  ${MY_SOURCE_DIR}/dm_communication.cpp
+  ${MY_SOURCE_DIR}/dm_task.cpp ${MY_SOURCE_DIR}/dm_localDB.cpp
+  ${MY_SOURCE_DIR}/communication/dm_communication.cpp ${MY_SOURCE_DIR}/communication/dm_nodes_communication.cpp
   ${MY_LIB_DIR}/tcp_sockets.cpp ${MY_LIB_DIR}/udp_sockets.cpp ${MY_LIB_DIR}/sockets_basic.cpp
   ${MY_LOGGER_DIR}/lib/Logger_impl.cpp
+  ${MY_SOURCE_DIR}/misc/conversions.cpp ${MY_SOURCE_DIR}/misc/conversions.h
 )
 
+# target_link_libraries(DM_sim Qt${QT_VERSION_MAJOR}::Core ipm)
 target_link_libraries(DM_sim Qt${QT_VERSION_MAJOR}::Core)
 
 target_include_directories(DM_sim PUBLIC
